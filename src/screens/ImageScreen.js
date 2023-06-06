@@ -9,6 +9,8 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { useEffect, useRef, useState } from "react";
 import { SafeScreen } from "../components/SafeScreen";
+import { UserImageMessage } from "../components/UserImageMessage";
+import { IaImageMessage } from "../components/IaImageMessage";
 import { Header } from "../components/Header";
 import {
   useIsFocused,
@@ -18,6 +20,7 @@ import {
 import { ROUTES } from "../navigation/routes";
 import { sendImageToChatbot } from "../services/IAService";
 import { incrementImageResponsesCount } from "../services/analyticsStorageService";
+import * as ImagePicker from 'expo-image-picker';
 
 const ImageScreen = () => {
   const navigation = useNavigation();
@@ -52,7 +55,22 @@ const ImageScreen = () => {
   const navigateToCamera = () => {
     navigation.navigate(ROUTES.CAMERA, { addMessage });
   };
+  const [galleryimage,setImage]=useState(null)
 
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 1,
+      allowsEditing:true
+
+    });
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+      addMessage(galleryimage);
+    }
+  };
+ 
   return (
     <SafeScreen>
       <Header title="Canal de Imagen" />
@@ -61,7 +79,18 @@ const ImageScreen = () => {
           ref={scrollViewRef}
           style={styles.messagesContainer}
           contentContainerStyle={{ gap: 20 }}
+          onContentSizeChange={() =>
+            scrollViewRef.current.scrollToEnd({ animated: true })
+          }
         >
+
+            {chatMessages.map((msg, index) =>
+            msg.isUser ? (
+              <UserImageMessage messageimageUri={msg.imageUri} key={index} />
+            ) : (
+              <IaImageMessage messageimageUri={msg.imageUri} key={index} />
+            )
+          )}
         </ScrollView>
         <View
           style={{ flexDirection: "row", justifyContent: "center", gap: 10 }}
@@ -73,7 +102,11 @@ const ImageScreen = () => {
               color="white"
               onPress={navigateToCamera}
             />
-            <Ionicons name="image" size={24} color="white" />
+            <Ionicons 
+            name="image" 
+            size={24} 
+            color="white"
+            onPress={pickImage} />
           </View>
         </View>
       </KeyboardAvoidingView>

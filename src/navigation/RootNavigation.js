@@ -9,6 +9,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Text, View } from "react-native";
 import { CameraScreen } from "../screens/CameraScreen";
 
+
 const Tab = createBottomTabNavigator();
 const ImageStack = createStackNavigator();
 

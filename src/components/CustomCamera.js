@@ -51,15 +51,25 @@ const CustomCamera = () => {
   };
 
   return (
-    <View style={{ gap: 5 }}>
-      <Camera ref={camera} style={styles.box} type={type} ratio="1:1" />
-      <Button title="Cambiar cámara" onPress={toggleCameraType} />
-      <Button title="Tomar Foto" onPress={takePicture} />
-      {image !== null ? (
-        <Image source={{ uri: image }} style={styles.box} />
-      ) : (
-        <View style={[styles.box, { backgroundColor: "grey" }]} />
-      )}
+    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      <View
+        style={{
+          backgroundColor: "#F2F4F5",
+          padding: 18,
+          borderBottomLeftRadius: 24,
+          borderBottomRightRadius: 24,
+          borderTopRightRadius: 24,
+        }}
+      >
+        <Camera ref={camera} style={styles.box} type={type} ratio="1:1" />
+        <Button title="Cambiar cámara" onPress={toggleCameraType} />
+        <Button title="Tomar Foto" onPress={takePicture} />
+        {image !== null ? (
+          <Image source={{ uri: image }} style={styles.box} />
+        ) : (
+          <View style={[styles.box, { backgroundColor: "grey" }]} />
+        )}
+      </View>
     </View>
   );
 };
