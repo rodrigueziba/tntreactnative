@@ -63,11 +63,11 @@ const ImageScreen = () => {
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       quality: 1,
       allowsEditing:true
-
+      
     });
     if (!result.canceled) {
       setImage(result.assets[0].uri);
-      addMessage(galleryimage);
+      addMessage(result.assets[0].uri);
     }
   };
  
